@@ -6,9 +6,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import HomeIcon from '@material-ui/icons/Home';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import ProductList from './ProductList';
 import ProductDetail from './ProductDetail';
 import {
@@ -49,7 +52,8 @@ class App extends Component {
             cart: {},
             pageIcon: '',
             pageTitle: '',
-            pageRoute: ''
+            pageRoute: '',
+            anchorEl: null
         };
     }
 
@@ -79,18 +83,36 @@ class App extends Component {
                         <AppBar position='static'>
                             <Toolbar>
                                 <Breadcrumbs className={classes.breadcrumbs} separator={<NavigateNextIcon className={classes.separatorIcon} />} >
-                                    <Link to="/products" className={classes.link}>
+                                    <Link to='/products' className={classes.link}>
                                         <HomeIcon className={classes.icon} /> Mobile store
                                     </Link>
                                     <Link to={this.state.pageRoute} className={classes.link}>
                                         {this.state.pageIcon}{this.state.pageTitle}
                                     </Link>
                                 </Breadcrumbs>
-                                <IconButton color='inherit'>
+                                <IconButton color='inherit' onClick={(event) => {
+                                    if (Object.keys(this.state.cart).length > 0) {
+                                        this.setState({ anchorEl: event.currentTarget });
+                                    }
+                                }}>
                                     <Badge badgeContent={Object.values(this.state.cart).reduce((a, b) => a + b, 0)} color='secondary'>
                                         <ShoppingCartIcon />
                                     </Badge>
                                 </IconButton>
+                                <Menu
+                                    id="simple-menu"
+                                    anchorEl={this.state.anchorEl}
+                                    keepMounted
+                                    open={Boolean(this.state.anchorEl)}
+                                    onClose={() => this.setState({ anchorEl: null })}
+                                >
+                                    <MenuItem onClick={() => {
+                                        setCartIntoCache({});
+                                        this.setState({ anchorEl: null, cart: {} });
+                                    }}>
+                                        <DeleteForeverIcon />Delete
+                                    </MenuItem>
+                                </Menu>
                             </Toolbar>
                         </AppBar>
                     </div>

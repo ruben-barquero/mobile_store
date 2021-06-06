@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { createStyles, withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -19,6 +20,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import PhoneAndroidIcon from '@material-ui/icons/PhoneAndroid';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import {
   getProduct as getProductFromApi,
   addToCart
@@ -83,6 +85,11 @@ const styles = createStyles((theme) => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)'
+  },
+  link: {
+    width: '60px',
+    display: 'flex',
+    textDecoration: 'none'
   },
 }));
 
@@ -155,6 +162,11 @@ class ProductDetail extends Component {
     const productTitle = `${data?.brand?.toUpperCase()} ${data?.model}`;
     return (
       <Grid container>
+        <Grid item xs={12}>
+          <Link to='/products' className={classes.link}>
+            <ArrowBackIcon />Back
+          </Link>
+        </Grid>
         <Grid item xs={4}>
           <Card className={classes.cardImage}>
             <img src={data.imgUrl} alt={productTitle} />
